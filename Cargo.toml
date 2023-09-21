@@ -1,7 +1,9 @@
 [package]
 name = "headr"
+authors = ["Minh Tran <minh@minhtrannhat.com>"]
 version = "0.1.0"
 edition = "2021"
+description = "Rust rewrite of BSD headr"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
