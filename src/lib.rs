@@ -35,14 +35,14 @@ pub fn get_args() -> HeadrResult<Config> {
                 .default_values(["-"]),
         )
         .arg(
-            Arg::new("number")
+            Arg::new("lines")
                 .short('n')
                 .long("lines")
                 .help(
                     "Print the first K lines instead of the first 10 with the leading '-', print all but the last K lines of each file")
                 .num_args(1)
                 .default_value("10")
-                .value_parser(value_parser!(u16).range(0..))
+                .value_parser(value_parser!(usize))
                 .action(ArgAction::Set)
         )
         .arg(
@@ -52,7 +52,7 @@ pub fn get_args() -> HeadrResult<Config> {
                 .help(
                     "print the first K bytes of each file; with the leading '-', print all but the last K lines of each file")
                 .num_args(1)
-                .value_parser(value_parser!(u16).range(0..))
+                .value_parser(value_parser!(usize))
                 .action(ArgAction::Set)
         )
         .get_matches();
@@ -63,7 +63,16 @@ pub fn get_args() -> HeadrResult<Config> {
             .expect("Must contains valid filepaths")
             .cloned()
             .collect(),
-        lines: *matches.get_one("number").expect(""),
-        bytes: *matches.get_one("bytes").expect(""),
+        lines: *matches.get_one::<usize>("lines").unwrap(),
+        bytes: match matches.get_one::<usize>("bytes") {
+            Some(bytes) => Some(*bytes),
+            None => None,
+        },
     })
+}
+
+pub fn run(config: Config) -> HeadrResult<()> {
+    println!("{:#?}", config);
+
+    Ok(())
 }
